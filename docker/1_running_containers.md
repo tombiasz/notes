@@ -9,8 +9,9 @@ Base on [Docker for Beginners - Linux](https://training.play-with-docker.com/beg
 * `docker container run` exists as soon as process exists. This stops the container
 
 ## 2. list containers
-`docker container ls —all` list containers and their status eg `exit(0)`
-Similar to `docker-compose ps`
+`docker container ls —all`
+* list containers and their status eg `exit(0)`
+* similar to `docker-compose ps`
 
 ## 3. run interactive session
 `docker container  —interactive —tty —rm run ubuntu bash`
