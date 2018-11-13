@@ -2,7 +2,7 @@
 Base on [Docker for Beginners - Linux](https://training.play-with-docker.com/beginner-linux/)
 
 ## 1. start container
-`docker container run alpine hostname` 
+`docker container run alpine hostname`
 
 * similar to `docker-compose run XXX hostname`
 * run command `hostname ` inside container `alpine`
@@ -36,7 +36,17 @@ docker container run \
 * `docker exec` == `docker container exec`
 
 ## 6. List images
-` docker image ls`
+` docker image ls --all`
 
+## 7. Remove images
+`docker image rm IMAGE_NAME`
+`docker image prune`
+`docker image prune --all`
 
+## 8. List containers
+`docker container ls --all`
 
+## 9. Remove containers
+`docker container rm CONTAINER_NAME`
+`docker container prune`
+`docker container prune --all`
