@@ -240,6 +240,136 @@ AWS_PROFILE=serverless serverless deploy
 1. You can also create a `IAM` user with `AdministratorAccess` policy but it's not secure
 2. You don't have to use aws profiles
 
+## Bonus
+
+Universal policy for any project name deployed via serverless (without
+additional resources eg. dynamodb, region specified). Save below code as eg.
+`ServerlessMinimalDeployment` policy and attach to any user that will deploy
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:CreateFunction",
+                "cloudformation:PreviewStackUpdate",
+                "logs:DescribeLogGroups",
+                "lambda:List*",
+                "logs:DescribeLogStreams",
+                "lambda:Get*",
+                "logs:FilterLogEvents",
+                "cloudformation:List*",
+                "cloudwatch:GetMetricStatistics",
+                "cloudformation:ValidateTemplate",
+                "cloudformation:Get*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": [
+                "apigateway:PUT",
+                "lambda:InvokeFunction",
+                "logs:DeleteLogGroup",
+                "s3:ListBucketVersions",
+                "s3:CreateBucket",
+                "s3:ListBucket",
+                "apigateway:DELETE",
+                "events:Delete*",
+                "iam:PassRole",
+                "logs:CreateLogStream",
+                "lambda:AddPermission",
+                "cloudformation:CreateStack",
+                "cloudformation:DeleteStack",
+                "cloudformation:UpdateStack",
+                "lambda:DeleteFunction",
+                "lambda:PublishVersion",
+                "apigateway:POST",
+                "apigateway:GET",
+                "lambda:RemovePermission",
+                "s3:DeleteBucket",
+                "lambda:CreateAlias"
+            ],
+            "Resource": [
+                "arn:aws:apigateway:*::/restapis*",
+                "arn:aws:cloudformation:*:*:stack/*-*/*",
+                "arn:aws:events:*:*:rule/*-*-*",
+                "arn:aws:lambda:*:*:function:*-*-*",
+                "arn:aws:s3:::*serverlessdeploy*",
+                "arn:aws:iam::*:role/*",
+                "arn:aws:logs:*:*:*"
+            ]
+        },
+        {
+            "Sid": "VisualEditor2",
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetRole",
+                "s3:PutObject",
+                "s3:GetObject",
+                "iam:DeleteRolePolicy",
+                "iam:CreateRole",
+                "iam:DeleteRole",
+                "iam:PutRolePolicy",
+                "s3:DeleteObject",
+                "logs:PutLogEvents"
+            ],
+            "Resource": [
+                "arn:aws:iam::*:role/*-*-*-lambdaRole",
+                "arn:aws:logs:*:*:*",
+                "arn:aws:s3:::*serverlessdeploy*"
+            ]
+        },
+        {
+            "Sid": "VisualEditor3",
+            "Effect": "Allow",
+            "Action": [
+                "cloudformation:CreateUploadBucket",
+                "cloudformation:Describe*"
+            ],
+            "Resource": "arn:aws:cloudformation:*:*:stack/*-*/*"
+        },
+        {
+            "Sid": "VisualEditor4",
+            "Effect": "Allow",
+            "Action": "lambda:Update*",
+            "Resource": "arn:aws:lambda:*:*:function:*-*-*"
+        },
+        {
+            "Sid": "VisualEditor5",
+            "Effect": "Allow",
+            "Action": "kinesis:*",
+            "Resource": "arn:aws:kinesis:*:*:stream/*-*-*"
+        },
+        {
+            "Sid": "VisualEditor6",
+            "Effect": "Allow",
+            "Action": "sqs:*",
+            "Resource": "arn:aws:sqs:*:*:*-*-*"
+        },
+        {
+            "Sid": "VisualEditor7",
+            "Effect": "Allow",
+            "Action": "logs:CreateLogGroup",
+            "Resource": "arn:aws:logs:*:*:*"
+        },
+        {
+            "Sid": "VisualEditor8",
+            "Effect": "Allow",
+            "Action": [
+                "events:Put*",
+                "events:Remove*"
+            ],
+            "Resource": "arn:aws:events:*:*:rule/*-*-*"
+        }
+    ]
+}
+```
+
 ## Refs:
 - https://github.com/dancrumb/generator-serverless-policy
 - https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html
