@@ -224,11 +224,11 @@ provided policy configuration:
 }
 ```
 
-## 5 Add policy to user
+## 5. Add policy to user
 
 Go to AWS console and create policy from generated json and attach it to the user
 
-## 6 Deploy
+## 6. Deploy
 
 ```
 AWS_PROFILE=serverless serverless deploy
