@@ -1,6 +1,15 @@
-# Value object design pattern
+<!-- TOC -->
 
-## Code sample
+- [1. Value object design pattern](#1-value-object-design-pattern)
+  - [1.1. Code sample](#11-code-sample)
+  - [1.2. Notes](#12-notes)
+  - [1.3. Refs](#13-refs)
+
+<!-- /TOC -->
+
+# 1. Value object design pattern
+
+## 1.1. Code sample
 ```
 class PublicationDate {
   constructor(start, end) {
@@ -106,14 +115,14 @@ console.log(PublicationDate.todayOnly());
 
 ```
 
-## Notes:
+## 1.2. Notes
 - immutability - no setters; only copies
 - value equality - equal by value not reference
 - self validation - you cannot create invalid object
 - easy to test
 
 
-## Refs:
+## 1.3. Refs
 - https://hackernoon.com/value-objects-like-a-pro-f1bfc1548c72
 - https://crushlovely.com/journal/7-patterns-to-refactor-javascript-applications-value-objects
 - https://martinfowler.com/bliki/ValueObject.html
