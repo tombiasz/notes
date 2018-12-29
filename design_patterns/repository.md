@@ -1,13 +1,15 @@
 <!-- TOC -->
 
-- [1. Repository design pattern](#1-repository-design-pattern)
+- [1. Repository](#1-repository)
   - [1.1. Code sample](#11-code-sample)
   - [1.2. Notes](#12-notes)
   - [1.3. Refs](#13-refs)
 
 <!-- /TOC -->
 
-# 1. Repository design pattern
+# 1. Repository
+
+Use to abstract way of the app to ork with data layer
 
 ## 1.1. Code sample
 ```
@@ -88,10 +90,8 @@ console.log(mapRepository.getAll());
 ```
 
 ## 1.2. Notes
- - create(attrs) does not belong to repository. Repository is a collection not
- a factory
- - implementation can be easily swap if using common interface which can be
- beneficial in testing (swap DbRepository with ArrayRepository)
+ - create(attrs) does not belong to repository. Repository is a collection not a factory
+ - implementation can be easily swap if using common interface which can be beneficial in testing (swap DbRepository with ArrayRepository)
  - repository interfaces (here BaseRepository) belong to the domain-layer
  - the implementation of repositories belong to the application-service layer
 
