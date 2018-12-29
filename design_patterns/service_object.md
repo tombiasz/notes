@@ -8,6 +8,8 @@
 <!-- /TOC -->
 # 1. Service object
 
+Use when need to perform complex domain logic operation
+
 ## 1.1. Code sample
 ```
 class RegisterUser {
