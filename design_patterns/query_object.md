@@ -8,6 +8,8 @@
 <!-- /TOC -->
 # 1. Query object
 
+Use when it would be better for readability to split DB query into smaller, easier to understand parts
+
 ## 1.1. Code sample
 
 Simplest approach
@@ -102,7 +104,7 @@ RecentUserProjectsQuery.query({ userId: 1337 });
 - Here we pass `db` as a first parameter, but it could be easily changed to accept other queries
 - `query` method returns `knex` object which can be chained further
 - query objects should be tests against real database
-- Group query objects in namespaces
+- group query objects in namespaces
 
 ## 1.3. Refs
 - https://crushlovely.com/journal/7-patterns-to-refactor-javascript-applications-query-objects
