@@ -1,12 +1,14 @@
 <!-- TOC -->
 
-- [1. Form object](#1-form-object)
+- [1. Form object (Request object)](#1-form-object-request-object)
   - [1.1. Code sample](#11-code-sample)
   - [1.2. Notes](#12-notes)
   - [1.3. Refs](#13-refs)
 
 <!-- /TOC -->
-# 1. Form object
+# 1. Form object (Request object)
+
+Use when you need to perform data validation and processing
 
 ## 1.1. Code sample
 ```
@@ -88,6 +90,7 @@ console.log(PostMessage.process({ username: 'foo', body: 'fizzbuzz' }));
 
 ## 1.2. Notes
 - specialized Service Object dedicated to perform validation and persistence
+- if processing is too complex delegate it to service object
 
 ## 1.3. Refs
 - https://crushlovely.com/journal/7-patterns-to-refactor-javascript-applications-form-objects
