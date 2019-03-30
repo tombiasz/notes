@@ -1,4 +1,15 @@
-## Object mother/Test Data Factory
+<!-- TOC -->
+
+- [1. Test data builder + Object Mother](#1-test-data-builder--object-mother)
+  - [1.1. Object mother/Test Data Factory](#11-object-mothertest-data-factory)
+  - [1.2. Test data builder](#12-test-data-builder)
+  - [1.3. Test data builder + Object mother](#13-test-data-builder--object-mother)
+  - [1.4. Refs](#14-refs)
+
+<!-- /TOC -->
+# 1. Test data builder + Object Mother
+
+## 1.1. Object mother/Test Data Factory
 
 A factory to create similar objects during tests
 
@@ -28,7 +39,7 @@ console.log(TestFactory.regularUser());
 console.log(TestFactory.adminUser());
 ```
 
-## Test data builder
+## 1.2. Test data builder
 
 Allow for fluent approach to test object creation
 
@@ -73,7 +84,7 @@ console.log(UserBuilder
 ```
 
 
-## Test data builder + Object mother
+## 1.3. Test data builder + Object mother
 
 Both methods combined for maximum flexibility
 
@@ -126,5 +137,5 @@ console.log(
 
 ```
 
-## Refs
+## 1.4. Refs
 - https://martinfowler.com/bliki/ObjectMother.html
