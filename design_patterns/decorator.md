@@ -1,102 +1,161 @@
 <!-- TOC -->
 
 - [1. Decorator](#1-decorator)
-  - [1.1. Code sample](#11-code-sample)
-  - [1.2. Notes](#12-notes)
-  - [1.3. Refs](#13-refs)
+    - [1.1. Code sample](#11-code-sample)
+    - [1.2. Notes](#12-notes)
+    - [1.3. Refs](#13-refs)
 
 <!-- /TOC -->
 
 # 1. Decorator
 
-Use when you need to extend the behavior of the class and the inheritance does
-not feel right
+Use when you need to extend the behavior of the class on runtime or the
+inheritance does not feel right
 
 ## 1.1. Code sample
 
 classic approach
 ```javascript
-const userDb = {
-  1: {
-    firstname: 'foo',
-    lastname: 'bar',
-  },
-  2: {
-    firstname: 'fizz',
-    lastname: 'buzz,'
-  }
-};
+const ERROR = 'error';
+const WARNING = 'warning';
+const INFO = 'info';
 
-class UserRepository {
-  constructor(db, logger) {
-    this._db = db;
-    this._logger = logger;
+// domain object
+class Alert {
+  constructor(level, message) {
+    this.level = level;
+    this.message= message;
   }
 
-  getUser(id) {
-    this._logger.info(`loading user ${id} from db`);
-    const record = this._db[id];
-
-    if (!record) {
-      this._logger.error(`user ${id} not found`);
-      throw new Error('user not found')
-    }
-
-    return record;
+  isError() {
+    return this.level === ERROR;
   }
 
-  updateUser(id, { firstname, lastname }) {
-    this.getUser(id);
-
-    this._logger.info(`updating user ${id}`);
-    const newRecord = { firstname, lastname };
-    this._db[id] = newRecord;
-
-    return true;
+  isWarning() {
+    return this.level === WARNING || this.level === ERROR;
   }
 }
 
-// decorator
-class CachedUserRepository {
-  constructor(userRepository, logger) {
-    this._userRepository = userRepository;
-    this._logger = logger;
-    this._cache = {};
-  }
-
-  getUser(id) {
-    this._logger.info(`loading user ${id} from cache`);
-    const cached = this._cache[id];
-
-    if (cached) {
-      this._logger.info(`cache hit: user ${id}`);
-      return cached;
-    }
-
-    this._logger.info(`cache miss: user ${id}`);
-    const record = this._userRepository.getUser(id);
-    this._cache[id] = record;
-    return record;
-  }
-
-  updateUser(id, { firstname, lastname }) {
-    this._logger.info(`user ${id} marked as dirty`);
-    delete this._cache[id];
-    return this._userRepository.updateUser(id, { firstname, lastname });
+// component interface
+class BaseAlertService {
+  register(alert) {
+    throw new Error('not implemented')
   }
 }
 
-const userRepo = new UserRepository(userDb, console);
-console.log(userRepo.getUser(1));
+// component implementation
+class AlertService extends BaseAlertService {
+  constructor(alertRepository) {
+    super();
+    this.alertRepository = alertRepository;
+  }
 
-const decoratedRepo = new CachedUserRepository(userRepo, console);
-console.log(decoratedRepo.getUser(2));
-console.log(decoratedRepo.getUser(2));
-console.log(decoratedRepo.getUser(2));
+  register(alert) {
+    return this.alertRepository.save(alert);
+  }
+}
 
-decoratedRepo.updateUser(2, { firstname: 'tim', lastname: 'tom' });
-console.log(decoratedRepo.getUser(2));
-console.log(decoratedRepo.getUser(2));
+// decorator interface
+class AlertServiceDecorator {
+  register(alert) {
+    throw new Error('not implemented');
+  }
+}
+
+// decorator implementation
+class EmailAlertServiceDecorator extends AlertServiceDecorator {
+  constructor(alertService, emailService) {
+    super();
+    this.alertService = alertService;
+    this.emailService = emailService;
+  }
+
+  register(alert) {
+    const result = this.alertService.register(alert);
+    this._registerEmail(result);
+    return result;
+  }
+
+  _formatEmail(alert) {
+    return {
+      subject: `[${alert.level}]: ${alert.message}`.slice(0, 20),
+      body: alert.message,
+    };
+  }
+
+  _registerEmail(alert) {
+    this.emailService.register(this._formatEmail(alert));
+  }
+}
+
+// decorator implementation
+class SMSAlertServiceDecorator extends AlertServiceDecorator {
+  constructor(alertService, smsService) {
+    super();
+    this.alertService = alertService;
+    this.smsService = smsService;
+  }
+
+  get messageMaxSize() {
+    return 160;
+  }
+
+  register(alert) {
+    const result = this.alertService.register(alert);
+    this._registerSms(result);
+    return result;
+  }
+
+  _formatMessage(alert) {
+    return `${alert.level} ${alert.message}`.slice(0, this.messageMaxSize);
+  }
+
+  _registerSms(alert) {
+    this.smsService.register({ message: this._formatMessage(alert) });
+  }
+}
+
+const alertRepository = {
+  save(alert) {
+    console.log('Storing alert in DB', alert);
+    return alert;
+  }
+}
+
+const emailService = {
+  register({ subject, body }) {
+    console.log('Sending alert via email', subject, body);
+  }
+}
+
+const smsService = {
+  register({ message }) {
+    console.log('Sending alert via sms', message);
+  }
+}
+
+// you can extend object on runtime
+const alertHandler = (alert) => {
+  let alertService = new AlertService(alertRepository);
+
+  if (alert.isWarning()) {
+    alertService = new EmailAlertServiceDecorator(alertService, emailService);
+  }
+
+  if (alert.isError()) {
+    alertService = new SMSAlertServiceDecorator(alertService, smsService);
+  }
+
+  return alertService.register(alert);
+}
+
+const error = new Alert(ERROR, 'foo bar');
+const warning = new Alert(WARNING, 'fizz buzz');
+const info = new Alert(INFO, 'tim tom');
+
+console.log(alertHandler(info));
+console.log(alertHandler(warning));
+console.log(alertHandler(error));
 ```
 
 decorator for command-like object
